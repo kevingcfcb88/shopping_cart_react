@@ -1,11 +1,14 @@
 import React from 'react';
 import Nav from './Nav';
 import './App.css';
+import ItemPage from './ItemPage';
+import {items} from './static-data';
 
 class App extends React.Component{
 
   state = {
-    aciveTab: 0
+    aciveTab: 0,
+    cart:[]
   };
 
   handleTabChange = (index) => {
@@ -14,10 +17,16 @@ class App extends React.Component{
     });
   }
 
+  handleAddToCart = (item) => {
+    this.setState({
+      cart: [...this.state.cart,item.id]
+    });
+  }
+
   renderContent(){
     switch(this.state.aciveTab){
       default: 
-      case 0: return <nav>Items</nav>;
+      case 0: return (<ItemPage items={items} onAddToCart={this.handleAddToCart}/>);
       case 1: return <nav>Cart</nav>;
     }
   }
