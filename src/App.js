@@ -3,6 +3,7 @@ import Nav from './Nav';
 import './App.css';
 import ItemPage from './ItemPage';
 import {items} from './static-data';
+import CartPage from './CartPage';
 
 class App extends React.Component{
 
@@ -27,8 +28,34 @@ class App extends React.Component{
     switch(this.state.aciveTab){
       default: 
       case 0: return (<ItemPage items={items} onAddToCart={this.handleAddToCart}/>);
-      case 1: return <nav>Cart</nav>;
+      case 1: return this.renderCart();
     }
+  }
+
+  renderCart() {
+    // Count how many of each item is in the cart
+    let itemCounts = this.state.cart.reduce((itemCounts, itemId) => {
+      itemCounts[itemId] = itemCounts[itemId] || 0;
+      itemCounts[itemId]++;
+      return itemCounts;
+    },{});
+    console.log(itemCounts);
+    // Create an array of items
+    let cartItems = Object.keys(itemCounts).map(itemId => {
+      // Find the item by its id
+      var item = items.find(item => 
+        item.id === parseInt(itemId,10)  
+      );
+      // Create a new "item" that also has a 'count' property
+      return {
+        ...item,
+        count: itemCounts[itemId]
+      }
+    });
+    
+    return (
+      <CartPage items={cartItems}/>
+    );
   }
 
   render(){
@@ -39,9 +66,11 @@ class App extends React.Component{
         <main className="App-content">
           {this.renderContent()}
         </main>
-      </div>
+      </div>      
     );
   }
 }
+
+
 
 export default App;
