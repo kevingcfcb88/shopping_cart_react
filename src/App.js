@@ -24,6 +24,17 @@ class App extends React.Component{
     });
   }
 
+  handleRemoveOne = (item) => {
+    console.log(this.state.cart);
+    let index = this.state.cart.indexOf(item.id);
+    this.setState({
+      cart:[
+        ...this.state.cart.slice(0,index),
+        ...this.state.cart.slice(index,+1)
+      ]
+    });
+  }
+
   renderContent(){
     switch(this.state.aciveTab){
       default: 
@@ -39,7 +50,6 @@ class App extends React.Component{
       itemCounts[itemId]++;
       return itemCounts;
     },{});
-    console.log(itemCounts);
     // Create an array of items
     let cartItems = Object.keys(itemCounts).map(itemId => {
       // Find the item by its id
@@ -54,7 +64,7 @@ class App extends React.Component{
     });
     
     return (
-      <CartPage items={cartItems}/>
+      <CartPage items={cartItems} onAddOne={this.handleAddToCart} onRemoveOne={this.handleRemoveOne}/>
     );
   }
 
